@@ -12,6 +12,11 @@ import torch
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
+import sys
+import logging
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from model.SAEViT import SAEViT
 from utils.DiceLoss import DiceLoss
 
@@ -163,7 +168,7 @@ if __name__ == '__main__':
     parser.add_argument('--weight_decay', default=0.0025)
     parser.add_argument('--eps', default=1e-4)
     parser.add_argument('--model_save_path', default='./checkpoint/')
-    parser.add_argument('--resume', default=None)
+    parser.add_argument('--resume', default=None) 
     # parser.add_argument('--resume', default='') # Write pre training weights here
     parser.add_argument('--start_epoch', default=0, type=int)
     parser.add_argument('--logs_save_path', default='/root/tf-logs/logs')
@@ -264,7 +269,7 @@ if __name__ == '__main__':
     no_optim = 0
     if os.path.isfile(args.logs_save_path):
         os.remove(args.logs_save_path)
-    writer = SummaryWriter(f'{args.logs_save_path}/')
+    # writer = SummaryWriter(f'{args.logs_save_path}/')
     # wind = visdom.Visdom()
     # test_image = Image.open(args.test_image).convert('RGB')
     # image_tensor = tf.to_tensor(test_image).to(device=device)
@@ -333,19 +338,19 @@ if __name__ == '__main__':
         # wind.line([val_f1[1]], [epoch], win='f1', opts=dict(title='f1'), update='append')
         # wind.line([val_iou[1]], [epoch], win='iou', opts=dict(title='iou'), update='append')
 
-        writer.add_scalars("epoch/loss", {'train': train_loss, 'val': val_loss}, epoch)
-        writer.add_scalars("epoch/acc", {'train': train_acc, 'val': val_acc}, epoch)
-        writer.add_scalar('epoch/oa', val_oa, epoch)
-        writer.add_scalars("epoch/class_acc",
-                           {'non building acc': val_class_acc[0], 'building acc': val_class_acc[1], 'm_acc': val_m_acc}, epoch)
-        writer.add_scalars("epoch/iou",
-                           {'non building iou': val_iou[0], 'building iou': val_iou[1],
-                            'm_iou': val_miou, 'fw_iou': val_fwiou}, epoch)
-        writer.add_scalars("epoch/precision", {'non building precision': val_precision[0],
-                                               'building precision': val_precision[1]}, epoch)
-        writer.add_scalars("epoch/recall", {'non building recall': val_recall[0], 'building recall': val_recall[1]}, epoch)
-        writer.add_scalars("epoch/f1", {'non building f1': val_f1[0], 'building f1': val_f1[1]}, epoch)
-        writer.add_scalars("epoch/dice", {'non building dice': val_dice[0], 'building dice': val_dice[1]}, epoch)
+        # writer.add_scalars("epoch/loss", {'train': train_loss, 'val': val_loss}, epoch)
+        # writer.add_scalars("epoch/acc", {'train': train_acc, 'val': val_acc}, epoch)
+        # writer.add_scalar('epoch/oa', val_oa, epoch)
+        # writer.add_scalars("epoch/class_acc",
+        #                    {'non building acc': val_class_acc[0], 'building acc': val_class_acc[1], 'm_acc': val_m_acc}, epoch)
+        # writer.add_scalars("epoch/iou",
+        #                    {'non building iou': val_iou[0], 'building iou': val_iou[1],
+        #                     'm_iou': val_miou, 'fw_iou': val_fwiou}, epoch)
+        # writer.add_scalars("epoch/precision", {'non building precision': val_precision[0],
+        #                                        'building precision': val_precision[1]}, epoch)
+        # writer.add_scalars("epoch/recall", {'non building recall': val_recall[0], 'building recall': val_recall[1]}, epoch)
+        # writer.add_scalars("epoch/f1", {'non building f1': val_f1[0], 'building f1': val_f1[1]}, epoch)
+        # writer.add_scalars("epoch/dice", {'non building dice': val_dice[0], 'building dice': val_dice[1]}, epoch)
 
         model_name = os.path.join(args.model_save_path, 'checkpoint_' + 'epoch_' + str(epoch) + '.pth')
         checkpoint = {
@@ -356,7 +361,7 @@ if __name__ == '__main__':
         }
         torch.save(checkpoint, model_name)
 
-    writer.close()
+    # writer.close()
 
     time_end = time.time()
     te = time.localtime()

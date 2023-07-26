@@ -2,9 +2,14 @@ import os
 import cv2
 import torch
 import torch.utils.data as data
+
+import sys
+import logging
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # from torchvision import transforms as T
 import dataset.transforms as T
-
 
 class CustomDataset(data.Dataset):
     def __init__(self, dataset_root_path: str, train: bool = True, transforms=None):
@@ -53,3 +58,29 @@ class CustomDataset(data.Dataset):
 
     def __len__(self):
         return len(self.images_path)
+
+
+# if __name__ == '__main__':
+
+#     dataset_root_path = ""
+#     train_dataset = CustomDataset(dataset_root_path, train=True, transforms=T.ToTensor())
+#     print(len(train_dataset))
+#     val_dataset = CustomDataset(dataset_root_path, train=False, transforms=T.ToTensor())
+#     print(len(val_dataset))
+
+#     train_loader = torch.utils.data.DataLoader(dataset=train_dataset,
+#                                                batch_size=8,
+#                                                shuffle=True,
+#                                                num_workers=1,
+#                                                pin_memory=True
+#                                                )
+#     val_loader = torch.utils.data.DataLoader(dataset=val_dataset,
+#                                                batch_size=8,
+#                                                shuffle=True,
+#                                                num_workers=1,
+#                                                pin_memory=True)
+#     print(len(train_loader))
+#     print(len(val_loader))
+#     for image, label in train_loader:
+#         print(image.shape)
+#         print(label.shape)
